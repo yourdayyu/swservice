@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!--  Base分类明细tree视图  -->
+        <record id="view_base_category_entry_list" model="ir.ui.view">
+            <field name="name">Base分类明细</field>
+            <field name="model">swservice.base.category.entry</field>
+            <field name="arch" type="xml">
+                <tree string="Base分类明细">
+                    <field name="category_id" />
+                    <field name="category_key" />
+                    <field name="display_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_base_category_entry_form" model="ir.ui.view">
+            <field name="name">Base分类明细</field>
+            <field name="model">swservice.base.category.entry</field>
+            <field name="arch" type="xml">
+                <form string="Base分类明细">
+                    <sheet>
+                        <group col="4">
+                            <field name="category_id" />
+                            <field name="category_key" />
+                            <field name="name"/>
+                            <field name="parent_id"/>
+                            <field name="sequence" />
+                            <field name="description" />
+                            <field name="active"/>
+                            <field name="state" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="base_category_entry_view_search" model="ir.ui.view">
+            <field name="name">swservice.base.category.entry.view.search</field>
+            <field name="model">swservice.base.category.entry</field>
+            <field name="arch" type="xml">
+                <search string="搜索Base分类明细">
+                    <field name="name"/>
+                    <field name="display_name"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

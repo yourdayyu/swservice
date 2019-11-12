@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record model="swservice.base.stage" id="stage_1">
+        <field name="name">新建</field>
+        <field name="sequence">10</field>
+        <field name="state">new</field>
+    </record>
+    <record model="swservice.base.stage" id="stage_2">
+        <field name="name">进行中</field>
+        <field name="sequence">20</field>
+        <field name="state">doing</field>
+    </record>
+    <record model="swservice.base.stage" id="stage_3">
+        <field name="name">结束</field>
+        <field name="fold" eval="False"/>
+        <field name="is_done">True</field>
+        <field name="sequence">30</field>
+        <field name="state">done</field>
+    </record>
+    <record model="swservice.base.stage" id="stage_4">
+        <field name="name">取消</field>
+        <field name="fold" eval="True"/>
+        <field name="sequence">40</field>
+        <field name="state">cancel</field>
+    </record>
+</odoo>

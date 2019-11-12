@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <act_window id="action_other_tickets_button"
+                name="打开其他服务单"
+                res_model="swservice.ticket"
+                view_mode="tree,form"
+                domain="[('partner_id', '=', default_partner_id),
+                    ('state', 'in', ['new','doing','done']),
+                    ('id', '!=', active_id)]" />
+
+    <record id="view_tree_ticket" model="ir.ui.view">
+        <field name="name">Ticket Tree</field>
+        <field name="model">swservice.ticket</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-muted="state in ['cancel']"
+                decoration-primary="state in ['doing']"
+                decoration-success="state in ['done']"
+                decoration-warning="state in ['new']">
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="request_time"/>
+                <field name="user_id" />
+                <field name="stage_id" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <!--  服务单搜索视图(uid过滤我的单）  -->
+    <record id="view_filter_tickets" model="ir.ui.view">
+        <field name="model">swservice.ticket</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id" />
+                <field name="user_id" />
+                <field name="name" filter_domain="[('name', 'ilike', self)]" />
+                <filter string="未处理" name="type_new" domain="[('state', '=', 'new')]" />
+                <filter string="我的单" name="type_my" domain="[('user_id', '=', uid)]" />
+                <group expand="0" name="group_by" string="分组">
+                    <filter name="partner" string="客户" context="{'group_by': 'partner_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--  服务单表单视图 -->
+    <record id="view_form_ticket" model="ir.ui.view">
+        <field name="name">Ticket Form</field>
+        <field name="model">swservice.ticket</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state"  invisible="True" />
+                    <button name="button_doing"
+                            type="object"
+                            string="开始服务"
+                            states="new,cancel"
+                            class="oe_read_only oe_highlight" />
+                    <button name="button_done"
+                            type="object"
+                            string="结束服务"
+                            states="doing"
+                            class="oe_highlight" />
+                    <field name="state" widget="statusbar"
+                            options="{'clickable': '1', 'fold_field': 'fold'}" />
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button class="oe_stat_button"
+                                icon="fa-tasks"
+                                help="该客户其他服务单"
+                                type="action"
+                                name="%(action_other_tickets_button)d"
+                                context="{'default_partner_id': partner_id}">
+                            <field string="其他服务单"
+                                   name="num_other_tickets"
+                                   widget="statinfo" />
+                        </button>
+                    </div>
+
+                    <!--  看板组件  -->
+
+                    <field name="kanban_state" widget="state_selection" />
+                    <field name="priority" widget="priority" />
+
+                    <field name="partner_image" widget="image" class="oe_avatar" />
+                    <div class="oe_title">
+                        <label for="partner_id" class="oe_edit_only" />
+                        <h1><field name="partner_id" /></h1>
+                        <h3>
+                            <span class="oe_read_only">By </span>
+                            <label for="partner_contact_id" class="oe_edit_only" />
+                            <field name="partner_contact_id" class="oe_inline" domain="[('parent_id','=',partner_id)]" context="{'partner_id':partner_id}"/>
+                        </h3>
+                    </div>
+                    <group name="group_top">
+                        <group name="group_col1">
+                            <field name="request_time"/>
+                            <field name="name" />
+                        </group>
+                        <group name="group col2">
+                            <field name="user_id" />
+                            <field name="stage_id" options="{'no_create_edit': 1}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="请求和方案" name="request_solution">
+                            <group>
+                                <field name="prob_descr" />
+                                <field name="prob_solution" />
+                            </group>
+                        </page>
+                        <page string="跟踪和反馈" name="follow_feedback">
+                            <group>
+                                <field name="follow_suggest" />
+                                <field name="feedback" />
+                                <field name="issolved" widget="radio"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--  服务单日历视图 -->
+    <record id="view_calendar_ticket" model="ir.ui.view">
+        <field name="model">swservice.ticket</field>
+        <field name="arch" type="xml">
+            <calendar date_start="request_time"
+                      color="user_id">
+                <field name="partner_id" />
+                <field name="stage_id" />
+            </calendar>
+        </field>
+    </record>
+</odoo>

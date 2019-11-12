@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--服务应用主菜单 -->
+    <menuitem id="menu_swservice" name="服务" web_icon="swservice,static/description/icon.png" sequence="8"/>
+
+    <!-- 服务单菜单  context：为目标视图设置上下文信息，context="{'default_user_id' : uid}"这里设置没用，放在模型了 domain：是对可在打开视图中浏览的记录强制过滤的域表达式   domain="[('user_id', '=', uid)]" 删除了  不要局限只能看自己的服务单-->
+    <act_window id="action_swservice_ticket"
+                name="服务单"
+                res_model="swservice.ticket"
+                view_mode="kanban,tree,form,activity,calendar"
+                limit="80"
+                />
+    <menuitem id="menu_swservice_ticket"
+              name="服务单"
+              parent="menu_swservice"
+              action="action_swservice_ticket"
+              />
+
+    <!--  客户菜单  -->
+    <record model="ir.actions.act_window" id="partner_list_action">
+        <field name="name">客户</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_customer': 1,'res_partner_search_mode': 'customer',
+            'search_default_type_company': 1,'res_partner_search_mode': 'company',
+            'default_is_company': True, 'default_customer_rank': 1}</field>
+    </record>
+    <menuitem id="partner_menu" name="客户"
+              parent="menu_swservice"
+              action="partner_list_action"/>
+
+    <!--  配置菜单  -->
+    <menuitem id="configuration_menu" name="配置"
+              sequence="90"
+              groups="swservice_group_manager"
+              parent="menu_swservice" />
+
+
+    <!--  partner分类菜单  -->
+    <record model="ir.actions.act_window" id="partner_cat_list_action">
+        <field name="name">Partner分类</field>
+        <field name="res_model">res.partner.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="partner_cat_menu" name="Partner分类"
+              parent="configuration_menu"
+              action="partner_cat_list_action" />
+
+
+        <!--  Base阶段  -->
+    <act_window id="action_swservice_base_stage"
+                name="Base阶段"
+                res_model="swservice.base.stage"
+                view_mode="tree,form"
+                />
+    <menuitem id="menu_swservice_base_stage"
+              name="Base阶段"
+              parent="configuration_menu"
+              action="action_swservice_base_stage"
+              />
+
+        <!--  Base分类  -->
+    <record model="ir.actions.act_window" id="base_category_list_action">
+        <field name="name">Base分类</field>
+        <field name="res_model">swservice.base.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="base_category_menu" name="Base分类"
+              parent="configuration_menu"
+              action="base_category_list_action" />
+
+            <!--  Base分类明细  -->
+    <record model="ir.actions.act_window" id="base_category_entry_list_action">
+        <field name="name">Base分类明细</field>
+        <field name="res_model">swservice.base.category.entry</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="base_category_entry_menu" name="Base分类明细"
+              parent="configuration_menu"
+              action="base_category_entry_list_action" />
+
+</odoo>

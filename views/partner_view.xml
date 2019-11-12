@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!--  扩展客户form视图，添加自定义字段  -->
+        <record model="ir.ui.view" id="partner_swservice_form_view">
+            <field name="name">partner swservice</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page name="swservice" string="服务">
+                        <group name="container_row_2">
+                            <group string="客户信息" priority="1">
+                                <field name="swservice_priority" widget="priority" />
+                                <field name="swservice_base_category_partnersource" />
+                                <field name="swservice_base_category_partnerstate" />
+                            </group>
+                            <group string="服务信息" priority="2">
+                                <field name="swservice_user_id" />
+                                <field name="swservice_start_date" />
+                                <field name="swservice_expiry_date" />
+                                <field name="swservice_period" />
+                            </group>
+                        </group>
+                    </page>
+                    <page name="swservice_product" string="产品">
+                        <group string="产品信息">
+                            <field name="swservice_product_ids" widget="many2many_tags" />
+                            <field name="swservice_product_desc" />
+                        </group>
+                    </page>
+                    <page name="swservice_product" string="更多联系方式" attrs="{'invisible': [('is_company','=', True)]}">
+                        <group string="更多联系方式">
+                            <field name="swservice_contact_qq" />
+                            <field name="swservice_contact_wechat" />
+                            <field name="swservice_contact_bangwo8" />
+                        </group>
+                    </page>
+                </notebook>
+
+                <!--  扩展客户打开的联系人form视图，添加自定义联系方式字段  -->
+                <xpath expr="//notebook//page//field[@name='child_ids']//form//field[@name='mobile']" position="after">
+                    <field name="is_company" invisible="1"/>
+                    <field name="swservice_contact_qq" placeholder="qq" attrs="{'invisible': [('is_company','=', True)]}"/>
+                    <field name="swservice_contact_wechat" attrs="{'invisible': [('is_company','=', True)]}"/>
+                    <field name="swservice_contact_bangwo8" attrs="{'invisible': [('is_company','=', True)]}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!--  扩展客户search视图，按服务人员分组  -->
+        <record id="swservice_partner_view_search" model="ir.ui.view">
+            <field name="name">swservice.partner.search.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='group_by']" position="inside">
+                   <filter name="group_serviceperson" string="服务人员" context="{'group_by': 'swservice_user_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+                <!--  扩展客户tree list列表视图，添加列表里显示的客户字段  -->
+        <record id="swservice_partner_view_tree" model="ir.ui.view">
+            <field name="name">swservice.partner.tree.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='active']" position="after">
+                    <field name="user_id" string="销售负责" />
+                    <field name="swservice_user_id" string="服务负责" />
+                    <field name="swservice_base_category_partnersource" optional="hide" />
+                    <field name="swservice_base_category_partnerstate" optional="hide" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ticket_user,TicketUser,model_swservice_ticket,swservice_group_user,1,0,0,0
+access_ticket_manager,TicketManager,model_swservice_ticket,swservice_group_manager,1,1,1,1
+access_partnersource_user,PartnerSourceUser,model_swservice_partner_source,swservice_group_user,1,0,0,0
+access_partnersource_manager,PartnerSourceManager,model_swservice_partner_source,swservice_group_manager,1,1,1,1
+base_stage_user,Base Stage User,model_swservice_base_stage,swservice_group_user,1,0,0,0
+base_stage_manager,Base Stage Manager,model_swservice_base_stage,swservice_group_manager,1,1,1,1
+base_category_user,Base category User,model_swservice_base_category,swservice_group_user,1,0,0,0
+base_category_manager,Base category Manager,model_swservice_base_category,swservice_group_manager,1,1,1,1
+base_categoryentry_user,Base categoryentry User,model_swservice_base_category_entry,swservice_group_user,1,0,0,0
+base_categoryentry_manager,Base categoryentry Manager,model_swservice_base_category_entry,swservice_group_manager,1,1,1,1
